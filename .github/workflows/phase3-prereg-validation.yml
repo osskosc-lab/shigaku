@@ -1,0 +1,26 @@
+name: Phase 3 Preregistration Validation
+
+on:
+  pull_request:
+    paths:
+      - 'phase3/**'
+      - '.github/workflows/phase3-prereg-validation.yml'
+  push:
+    branches:
+      - 'phase3-real-world-pilot-prereg-20260809'
+    paths:
+      - 'phase3/**'
+      - '.github/workflows/phase3-prereg-validation.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run frozen sample-size regression tests
+        run: python -m unittest phase3.test_sample_size_recalc -v
+      - name: Smoke-test recalculation
+        run: python phase3/sample_size_recalc.py --nbar 6 --icc 0.25 --r 0.65 --cluster-loss 0.10
