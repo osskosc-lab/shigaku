@@ -1,0 +1,231 @@
+study:
+  id: shigaku_v2_phase3_real_world_pilot
+  version: 1.0.0
+  freeze_date_jst: '2026-08-09'
+  status: preregistered_before_randomization
+  purpose: feasibility_safety_and_preliminary_effect_estimation
+  confirmatory_superiority_claim_allowed: false
+
+source_boundary:
+  phase2_decision: 'real-world pilot GO; confirmatory superiority claim HOLD'
+  intervention_boundary:
+    included:
+      - single_accountable_owner_per_result
+      - deadline_and_end_state_definition
+      - responsibility_authority_alignment
+      - result_gap_next_commitment_review
+    prohibited_and_safety_relevant:
+      - intimidation
+      - threats
+      - verbal_abuse
+      - personal_attacks
+      - retaliation
+      - violence
+      - coercive_humiliation
+
+population:
+  unit_of_randomization: management_cluster
+  cluster_definition: 'Smallest employee group sharing one direct manager; one manager may not supervise clusters in different arms.'
+  inclusion:
+    - stable_direct_manager_for_baseline_and_planned_intervention
+    - measurable_weekly_target_and_actual_outcome
+    - positive_pre_randomization_target_denominator
+  exclusion:
+    - planned_reorganization_during_16_week_observation
+    - manager_spans_multiple_randomized_arms_and_cannot_be_reclustered
+    - fewer_than_4_baseline_weeks_available
+
+arms:
+  - id: control
+    label_ja: 現状対照
+    intervention: 'No new standardized management package beyond ordinary operations.'
+  - id: kpi_only
+    label_ja: KPIのみ
+    intervention: 'Frozen KPI definitions, dashboard and review cadence only; no Shikigaku structural package.'
+  - id: psychological_safety_only
+    label_ja: 心理的安全性のみ
+    intervention: 'Structured speak-up, error-reporting and learning review only; no Shikigaku structural package.'
+  - id: shikigaku
+    label_ja: 識学
+    intervention: 'Single accountable owner, deadline/end-state, responsibility-authority alignment, result-gap-next commitment review.'
+  - id: integrated
+    label_ja: 統合
+    intervention: 'Shikigaku package plus KPI package plus psychological-safety package.'
+
+schedule:
+  baseline_weeks: 4
+  intervention_weeks: 12
+  safety_reviews_weeks: [2, 4, 8, 12]
+  serious_event_monitoring: continuous
+  analysis_lock: 'After week 12 database lock and before arm labels are revealed to the primary analyst where operationally feasible.'
+
+baseline:
+  measurements_weekly:
+    - frozen_target
+    - actual_result
+    - target_attainment_ratio
+    - absenteeism_rate
+    - missingness_rate
+  measurements_at_week4:
+    - psychological_safety_scale
+    - turnover_intention_rate
+    - team_size
+  target_freeze_rule: 'All 12-week intervention targets must be documented before randomization. If operationally required changes occur later, original and revised targets are both retained; the original target remains primary.'
+
+randomization:
+  ratio: '1:1:1:1:1'
+  method: stratified_permuted_block_randomization
+  strata_definition: 'Tertiles of the 4-week baseline team-level target-attainment ratio across eligible clusters.'
+  block_size: 5
+  seed_rule: 'SHA256(study_id + freeze_date_jst); convert first 8 hex digits to unsigned integer.'
+  concealment: 'Allocation sequence generated after baseline lock by a person or script not involved in outcome editing.'
+
+outcomes:
+  primary:
+    name: cumulative_frozen_target_attainment_12w
+    level: cluster
+    formula: 'sum(actual_result_weeks_1_12) / sum(frozen_target_weeks_1_12)'
+    primary_contrast: 'shikigaku - control'
+  secondary:
+    - weekly_target_attainment_ratio
+    - overdue_or_deadline_failure_rate
+    - absenteeism_rate
+    - turnover_intention_rate
+    - psychological_safety_change
+    - intervention_fidelity
+  interpretation_boundary: 'Integrated-arm superiority does not identify synergy because this is not a full factorial design.'
+
+primary_analysis:
+  estimand: intention_to_treat_cluster_level_adjusted_mean_difference
+  model: 'OLS ANCOVA: Y12 ~ arm + baseline_ratio + randomization_stratum'
+  primary_contrast: 'beta(shikigaku) - beta(control)'
+  interval: '95% HC3 heteroskedasticity-robust confidence interval'
+  randomization_inference:
+    enabled: true
+    permutations: 100000
+    constrained_to_actual_randomization_scheme: true
+    two_sided_p_value: true
+  missing_cluster_primary_outcome: 'No model-based single imputation. Report missing cluster; sensitivity analysis uses conservative worst-rank assignment within arm.'
+  multiplicity: 'Only shikigaku vs control is confirmatory-design primary contrast; all other arm contrasts are exploratory in Phase 3.'
+
+sample_size_recalculation:
+  timing: 'After 4-week baseline lock and before randomization.'
+  planning_effect_standardized_d: 0.50
+  alpha_two_sided: 0.05
+  power: 0.80
+  z_alpha_over_2: 1.959964
+  z_power: 0.841621
+  inputs_estimated_from_baseline:
+    - mean_cluster_size_nbar
+    - intracluster_correlation_icc
+    - baseline_outcome_correlation_r
+  formula: 'm_raw = 2*(z_alpha_over_2+z_power)^2*(1-r^2)*(1+(nbar-1)*ICC)/(nbar*d^2)'
+  cluster_loss_inflation: 'm_req = ceil(m_raw / (1-Lc)); default Lc=0.10 unless a pre-randomization documented cluster-loss rate is larger.'
+  floor_teams_per_arm: 6
+  final_rule: 'required_per_arm = max(6, m_req)'
+  feasibility_rule: 'If available eligible clusters < 5*required_per_arm, enroll all eligible clusters as a pilot, label the study underpowered, and prohibit superiority claims.'
+  phase2_reference_grid:
+    - {icc: 0.15, d: 0.35, teams_per_arm: 24}
+    - {icc: 0.15, d: 0.50, teams_per_arm: 12}
+    - {icc: 0.15, d: 0.65, teams_per_arm: 9}
+    - {icc: 0.40, d: 0.35, teams_per_arm: 36}
+    - {icc: 0.40, d: 0.50, teams_per_arm: 21}
+    - {icc: 0.40, d: 0.65, teams_per_arm: 12}
+
+fidelity:
+  weekly_audit_items:
+    shikigaku:
+      - one_owner_per_result
+      - deadline_and_end_state_recorded
+      - responsibility_authority_consistent
+      - review_uses_result_gap_next_commitment
+    kpi_only:
+      - frozen_kpi_definition_used
+      - dashboard_updated_on_schedule
+    psychological_safety_only:
+      - speak_up_channel_available
+      - nonretaliation_rule_reiterated
+      - error_learning_review_completed
+  adequate_threshold: 0.80
+  implementation_failure_threshold: 0.70
+  implementation_failure_rule: 'If fidelity <0.70 for 2 consecutive audit weeks, classify causal interpretation as implementation failure unless corrected before the next prespecified review.'
+
+safety:
+  principle: 'Safety is independent of performance and may stop or modify intervention even when business outcomes improve.'
+  anonymous_measurement_required: true
+  independent_review_required: true
+  quantitative_review_triggers:
+    psychological_safety_change_sd: -0.50
+    absenteeism_absolute_increase_pp: 10
+    turnover_intention_absolute_increase_pp: 10
+  serious_event_immediate_pause:
+    - intimidation
+    - threats
+    - verbal_abuse
+    - personal_attack
+    - retaliation
+    - violence
+    - coercive_humiliation
+  action_on_trigger: 'Pause affected cluster intervention elements immediately, preserve data, and convene independent safety review to decide continue, modify, or stop.'
+  performance_cannot_override_safety: true
+
+stopping_rules:
+  stop_cluster_immediately_if:
+    - serious_safety_event_triggered
+    - independent_reviewer_orders_stop
+  pause_and_review_if:
+    - any_quantitative_safety_trigger_crossed
+    - data_integrity_failure_prevents_outcome_reconstruction
+  stop_study_if:
+    - same_intervention_related_serious_event_pattern_occurs_in_two_or_more_clusters
+    - randomization_or_target_freeze_is_materially_compromised_and_cannot_be_reconstructed
+  no_early_efficacy_stop: true
+
+falsification:
+  practical_effect_threshold_standardized_d: 0.35
+  shikigaku_benefit_claim_falsified_if:
+    conditions_all:
+      - 'primary contrast upper 95% CI is below +0.35 baseline-SD equivalent'
+      - 'shikigaku fidelity >= 0.80'
+      - 'primary outcome completeness >= 0.90'
+      - 'no material cross-arm contamination'
+  safety_compatibility_claim_falsified_if:
+    conditions_any:
+      - 'independent review attributes a serious safety event as plausibly intervention-related'
+      - 'psychological safety worsens by >=0.50 SD and persists at next scheduled review'
+      - 'absenteeism or turnover intention increases by >=10 percentage points and persists at next scheduled review'
+  not_falsified_but_unresolved_if:
+    - 'confidence interval contains both 0 and +0.35 SD threshold'
+    - 'fidelity below 0.80'
+    - 'primary outcome completeness below 0.90'
+    - 'material contamination exists'
+  no_effect_claim_forbidden_from_nonsignificance: true
+
+decision_after_phase3:
+  go_to_confirmatory_if_all:
+    - 'no unresolved safety stop'
+    - 'fidelity >= 0.80 in Shikigaku arm'
+    - 'primary outcome completeness >= 0.90'
+    - 'effect estimate direction favors Shikigaku over control'
+    - 'confirmatory sample size is feasible using observed ICC and baseline correlation'
+  hold_if:
+    - 'underpowered or unresolved estimate'
+    - 'fidelity or contamination prevents causal interpretation'
+  stop_if:
+    - 'safety compatibility claim falsified'
+    - 'material data integrity failure'
+
+reporting:
+  mandatory:
+    - CONSORT_style_cluster_flow
+    - baseline_table_by_arm
+    - primary_ITT_estimate_and_HC3_CI
+    - randomization_inference_p_value
+    - all_safety_triggers_and_reviews
+    - fidelity_by_arm_and_week
+    - missingness_and_contamination
+    - deviations_from_preregistration
+  prohibited_language:
+    - 'proves Shikigaku is superior'
+    - 'no effect because p>0.05'
+    - 'integrated arm proves synergy'
