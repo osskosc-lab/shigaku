@@ -1,0 +1,7 @@
+{
+  "employee": {"employee_id": "S001", "name": "営業一郎", "manager": "営業部長", "period_start": "2026-08-10", "period_end": "2026-08-16"},
+  "results": {"monthly_sales_target": 5000000, "monthly_sales_actual": 3200000, "orders": 5, "new_approaches": 8, "dormant_approaches": 4, "appointments_or_meetings": 6, "visits": 5, "proposals": 3, "estimates": 2},
+  "previous_action_change": {"promise": "休眠顧客へ4件接触する", "deadline": "2026-08-14T17:00:00+09:00", "completion_condition": "4件の接触結果を記録", "verification_metric": "休眠アプローチ", "executed": true, "observed_result": "休眠アプローチ4件", "completed_at": "2026-08-14T16:00:00+09:00"},
+  "next_action_change": {"action": "新規対象へ8件接触する", "owner": "営業一郎", "deadline": "2026-08-14T17:00:00+09:00", "completion_condition": "8件の接触結果を記録", "verification_metric": "新規アプローチ"},
+  "manager_decision": {"required": false, "subject": "", "decision_deadline": null}, "shared_information": "", "other_notes": ""
+}

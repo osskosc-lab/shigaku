@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Weekly Agency Result",
+  "type": "object",
+  "required": ["agent", "status", "findings", "evidence", "risks", "recommended_actions", "confidence", "data_gaps"],
+  "properties": {
+    "agent": {"type": "string"},
+    "status": {"enum": ["ok", "warning", "error", "insufficient_data"]},
+    "findings": {"type": "array"}, "evidence": {"type": "array"}, "risks": {"type": "array"},
+    "recommended_actions": {"type": "array"}, "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "data_gaps": {"type": "array", "items": {"type": "string"}}
+  }
+}
+
