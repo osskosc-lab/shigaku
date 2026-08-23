@@ -1,0 +1,2 @@
+employee_id,name,sales_achievement_rate,new_approaches,dormant_approaches,visits,proposals,estimates,approach_to_visit_rate,visit_to_proposal_rate,proposal_to_estimate_rate,previous_action_verdict,next_action_deadline,manager_decision_required,input_minutes,manager_review_minutes,alerts,data_gaps
+S001,営業一郎,0.82,12,5,7,4,3,0.4117647058823529,0.5714285714285714,0.75,effective,2026-08-25T17:00:00+09:00,True,7,3,上司判断待ち,

@@ -1,0 +1,28 @@
+name: weekly-agency-ci
+on:
+  pull_request:
+  push:
+    branches:
+      - feat/marukane-sales-weekly-agency-v1
+    paths:
+      - 'app/**'
+      - 'agents/**'
+      - 'schemas/**'
+      - 'research/**'
+      - 'tests/**'
+      - 'data/weekly/**'
+      - 'run_experiment.py'
+      - 'requirements.txt'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python -m app.main data/weekly/sample_current.json --previous data/weekly/sample_previous.json
+      - run: python run_experiment.py
+
