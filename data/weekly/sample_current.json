@@ -1,0 +1,8 @@
+{
+  "employee": {"employee_id": "S001", "name": "営業一郎", "manager": "営業部長", "period_start": "2026-08-17", "period_end": "2026-08-23"},
+  "results": {"monthly_sales_target": 5000000, "monthly_sales_actual": 4100000, "orders": 7, "new_approaches": 12, "dormant_approaches": 5, "appointments_or_meetings": 8, "visits": 7, "proposals": 4, "estimates": 3},
+  "previous_action_change": {"promise": "新規対象へ8件接触する", "deadline": "2026-08-21T17:00:00+09:00", "completion_condition": "8件の接触結果を記録", "verification_metric": "新規アプローチ", "executed": true, "observed_result": "12件接触し2件から返信", "completed_at": "2026-08-21T16:20:00+09:00"},
+  "next_action_change": {"action": "返信のあった2社へ訪問日時を提示する", "owner": "営業一郎", "deadline": "2026-08-25T17:00:00+09:00", "completion_condition": "2社へ候補日時を送信し記録する", "verification_metric": "訪問"},
+  "manager_decision": {"required": true, "subject": "値引上限の確認", "decision_deadline": "2026-08-24T12:00:00+09:00"}, "shared_information": "A社は午後連絡希望", "other_notes": "",
+  "operational_metadata": {"input_minutes": 7, "manager_review_minutes": 3, "submitted_at": "2026-08-23T17:30:00+09:00", "reviewed_at": "2026-08-24T08:40:00+09:00", "authority_confirmed": true}
+}

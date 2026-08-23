@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://marukane.example/schemas/weekly_report.schema.json",
+  "title": "Marukane Sales Weekly Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["employee", "results", "previous_action_change", "next_action_change", "manager_decision", "shared_information", "other_notes"],
+  "properties": {
+    "employee": {"type": "object", "additionalProperties": false, "required": ["employee_id", "name", "manager", "period_start", "period_end"], "properties": {
+      "employee_id": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1}, "manager": {"type": "string", "minLength": 1},
+      "period_start": {"type": "string", "format": "date"}, "period_end": {"type": "string", "format": "date"}
+    }},
+    "results": {"type": "object", "additionalProperties": false, "required": ["monthly_sales_target", "monthly_sales_actual", "orders", "new_approaches", "dormant_approaches", "appointments_or_meetings", "visits", "proposals", "estimates"], "properties": {
+      "monthly_sales_target": {"type": "number", "minimum": 0}, "monthly_sales_actual": {"type": "number", "minimum": 0},
+      "orders": {"type": "integer", "minimum": 0}, "new_approaches": {"type": "integer", "minimum": 0}, "dormant_approaches": {"type": "integer", "minimum": 0},
+      "appointments_or_meetings": {"type": "integer", "minimum": 0}, "visits": {"type": "integer", "minimum": 0}, "proposals": {"type": "integer", "minimum": 0}, "estimates": {"type": "integer", "minimum": 0}
+    }},
+    "previous_action_change": {"type": "object", "additionalProperties": false, "required": ["promise", "deadline", "completion_condition", "verification_metric", "executed", "observed_result"], "properties": {
+      "promise": {"type": "string"}, "deadline": {"type": "string", "format": "date-time"}, "completion_condition": {"type": "string"},
+      "verification_metric": {"type": "string"}, "executed": {"type": "boolean"}, "observed_result": {"type": "string"},
+      "completed_at": {"type": ["string", "null"], "format": "date-time"}
+    }},
+    "next_action_change": {"type": "object", "additionalProperties": false, "required": ["action", "owner", "deadline", "completion_condition", "verification_metric"], "properties": {
+      "action": {"type": "string", "minLength": 1}, "owner": {"type": "string", "minLength": 1}, "deadline": {"type": "string", "format": "date-time"},
+      "completion_condition": {"type": "string", "minLength": 1}, "verification_metric": {"type": "string", "minLength": 1}
+    }},
+    "manager_decision": {"type": "object", "additionalProperties": false, "required": ["required", "subject", "decision_deadline"], "properties": {
+      "required": {"type": "boolean"}, "subject": {"type": "string"}, "decision_deadline": {"type": ["string", "null"], "format": "date-time"}
+    }},
+    "shared_information": {"type": "string"}, "other_notes": {"type": "string"},
+    "operational_metadata": {"type": "object", "additionalProperties": false, "properties": {
+      "input_minutes": {"type": ["number", "null"], "minimum": 0},
+      "manager_review_minutes": {"type": ["number", "null"], "minimum": 0},
+      "submitted_at": {"type": ["string", "null"], "format": "date-time"},
+      "reviewed_at": {"type": ["string", "null"], "format": "date-time"},
+      "authority_confirmed": {"type": ["boolean", "null"]}
+    }}
+  }
+}
